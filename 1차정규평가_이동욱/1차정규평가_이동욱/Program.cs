@@ -10,6 +10,19 @@ class Program
 
 
     }
+    public void SelectMenuType(int mType)
+    {
+        switch (mType)
+        {
+            case 0:
+                break;
+            case 1:
+                break;
+            default:
+                break;
+        }
+    }
+
 }
 
 public enum MenuType
@@ -26,7 +39,6 @@ public enum FoodType
     음료
 }
 
-
 public abstract class Food
 {
     protected string FName;
@@ -38,5 +50,37 @@ public abstract class Food
         FName = fName;
         FType = fType;
         FPrice = fPrince;
+    }
+}
+
+public class Rice : Food
+{
+    public Rice(string fName, string fType, int fPrince) : base(fName, fType, fPrince)
+    {
+
+    }
+}
+
+public class Stew : Food
+{
+    public Stew(string fName, string fType, int fPrince) : base(fName, fType, fPrince)
+    {
+
+    }
+}
+
+public class Side : Food
+{
+    public Side(string fName, string fType, int fPrince) : base(fName, fType, fPrince)
+    {
+
+    }
+}
+
+public class Drink : Food
+{
+    public Drink(string fName, string fType, int fPrince) : base(fName, fType, fPrince)
+    {
+
     }
 }
