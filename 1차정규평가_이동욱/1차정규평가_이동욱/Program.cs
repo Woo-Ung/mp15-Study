@@ -1,7 +1,11 @@
-﻿using System;
+﻿// https://github.com/Woo-Ung/mp15-Study.git
+
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
+
 class Program
 {
     const string FOOD_STORE_NAME = "던전 국밥";
