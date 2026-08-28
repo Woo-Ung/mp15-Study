@@ -80,15 +80,17 @@ public class Kiosk
 
     public void PrintMyBag(List<Food> myMenu)
     {
-        Console.WriteLine("[장바구니]");
-        Console.WriteLine("=====================");
+        Console.WriteLine("");
+        Console.WriteLine("======== [장바구니] ========");
         Console.WriteLine();
         int totalM = 0;
         for (int i = 0; i < myMenu.Count;i++)
         {
-            Console.WriteLine($"{myMenu[i].FName} * {myMenu[i].Count}개 = {myMenu[i].Calculate()} ");
-            totalM += myMenu[i].Calculate();
+            Console.WriteLine($"{myMenu[i].FName} * {myMenu[i].Count}개 = {myMenu[i].Calculate()}원 ");
+            totalM += myMenu[i].Calculate();                                 
         }
+        Console.WriteLine();
+        Console.WriteLine($"===== 합계 금액 : {totalM}원 =====");
     }
 
     public void Order(int order, List<Food> myMenu,ref bool isOrder, ref bool isShutDown)
@@ -140,7 +142,7 @@ public class Kiosk
 
                 else
                 {
-                    Console.WriteLine($"결제가 거부되었습니다. 금액이 {totalM - myMoney}부족합니다.");
+                    Console.WriteLine($"결제가 거부되었습니다. 금액이 {totalM - myMoney}원 부족합니다.");
                     ConsoleInput.Pause();
                     Console.Clear();
                     return;
@@ -151,8 +153,8 @@ public class Kiosk
         {
             Console.Clear();
             Console.WriteLine("===== 영업 결과 =====");
-            Console.WriteLine($"총 주문 건수 : {TotalOrder}");
-            Console.WriteLine($"총 매출액 : {TotalMoney}");
+            Console.WriteLine($"총 주문 건수 : {TotalOrder}회");
+            Console.WriteLine($"총 매출액 : {TotalMoney}원");
             isOrder = false;
             isShutDown = true;
             return;
