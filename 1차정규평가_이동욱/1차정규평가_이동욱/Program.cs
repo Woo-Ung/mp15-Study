@@ -40,7 +40,10 @@ class Program
 
             while (isOrder)
             {
-                Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");
+                Console.WriteLine();
+                myKiosk.PrintMyBag(myMenu);
+                Console.WriteLine();                
+                Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");                
                 int order = ConsoleInput.ReadIntInRange("선택 번호 : ", 1, 4);
                 myKiosk.Order(order, myMenu,ref isOrder, ref isShutDown);
             }
@@ -73,6 +76,20 @@ public class Kiosk
     }
     
     // 매서드
+
+    public void PrintMyBag(List<Food> myMenu)
+    {
+        Console.WriteLine("[장바구니]");
+        Console.WriteLine("=====================");
+        Console.WriteLine();
+        int totalM = 0;
+        for (int i = 0; i < myMenu.Count;i++)
+        {
+            Console.WriteLine($"{myMenu[i].FName} * {myMenu[i].Count}개 = {myMenu[i].Calculate()} ");
+            totalM += myMenu[i].Calculate();
+        }
+    }
+
     public void Order(int order, List<Food> myMenu,ref bool isOrder, ref bool isShutDown)
     {
         int totalM = 0;
@@ -202,7 +219,10 @@ public class Kiosk
 
                 Mains mains = (Mains)Menu[orderNM];
                 mains.Count = orderCM;
-                myMenu.Add(mains);
+                if (!myMenu.Contains(mains))
+                {
+                    myMenu.Add(mains);
+                }
                 break;
 
             case 2:
@@ -217,12 +237,20 @@ public class Kiosk
                 {
                     Drink drink = (Drink)Menu[orderNS -1];
                     drink.Count = orderCS;
+                    if (!myMenu.Contains(drink))
+                    {
+                        myMenu.Add(drink);
+                    }
                     myMenu.Add(drink);                    
                 }
                 else 
                 {
                     Side side = (Side)Menu[orderNS - 1];
                     side.Count = orderCS;
+                    if (!myMenu.Contains(side))
+                    {
+                        myMenu.Add(side);
+                    }
                     myMenu.Add(side);                    
                 }
                 break;
@@ -233,11 +261,10 @@ public class Kiosk
     }
 }
 
-
 public abstract class Food
 {
     protected int FNum;
-    protected string FName;
+    public string FName { get; protected set; }
     public FoodType FType { get; protected set; }
     public int FPrice { get; protected set; }
 
