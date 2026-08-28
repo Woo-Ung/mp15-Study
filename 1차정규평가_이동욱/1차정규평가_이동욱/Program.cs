@@ -153,8 +153,11 @@ public class Kiosk
         {
             Console.Clear();
             Console.WriteLine("===== 영업 결과 =====");
+            Console.WriteLine();
             Console.WriteLine($"총 주문 건수 : {TotalOrder}회");
+            Console.WriteLine();
             Console.WriteLine($"총 매출액 : {TotalMoney}원");
+            Console.WriteLine();
             isOrder = false;
             isShutDown = true;
             return;
@@ -311,13 +314,31 @@ public class Mains : Food
 
 public class Side : Food
 {
+    const float DISCOUNT = 0.3f;
     public Side(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
 
     }
+
+    public override void PrintInfo()
+    {
+        Console.WriteLine($"{FNum}. [{FType}] {FName} : {FPrice}원 [\"2개 이상 구매시 30%할인\"]");
+    }
+
     public override int Calculate()
-    {        
-        return FPrice * Count;
+    {
+        if (Count > 0 && Count < 2)
+        {
+            return FPrice * Count;
+        }
+        else if (Count >= 2)
+        {
+            return (int)((FPrice * Count) - (DISCOUNT * (FPrice * Count)));
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
 
