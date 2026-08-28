@@ -9,15 +9,16 @@ class Program
     {
         Food[] menu = new Food[] 
         {             
-            new Rice(1, "타우 머리 국밥", FoodType.식사,9000),
-            new Rice(2, "용 꼬리 국밥", FoodType.식사,10000),
-            new Stew(3, "얼큰 용암 슬라임 찌개", FoodType.식사,7000),
-            new Stew(4, "복불복 미믹 찌개", FoodType.식사,8000),                      
+            new Mains(1, "타우 머리 국밥", FoodType.식사,9000),
+            new Mains(2, "용 꼬리 국밥", FoodType.식사,10000),
+            new Mains(3, "얼큰 용암 슬라임 찌개", FoodType.식사,7000),
+            new Mains(4, "복불복 미믹 찌개", FoodType.식사,8000),                      
             new Drink(5, "탄산 슬라임", FoodType.음료, 1000),
             new Drink(6, "세계수 이슬", FoodType.음료, 2000),
             new Side(7, "다진 만드라고라",FoodType.추가, 300),
             new Side(8, "하피 알",FoodType.추가, 500)
         };
+
         Kiosk myKiosk = new Kiosk(menu);
         
         List<Food> myMenu = new List<Food>();
@@ -75,6 +76,7 @@ public class Kiosk
     public void Order(int order, List<Food> myMenu,ref bool isOrder, ref bool isShutDown)
     {
         int totalM = 0;
+
         if (order == 1)
         {
             Console.Clear();
@@ -94,7 +96,7 @@ public class Kiosk
         {
             for (int i = 0; i < myMenu.Count; i++)
             {
-                totalM += myMenu[i].FPrice;
+                totalM += myMenu[i].Calculate();
             }
             if(myMenu.Count == 0)
             {
@@ -111,6 +113,7 @@ public class Kiosk
                     TotalMoney = totalM;
                     TotalOrder = 1;
                     myMenu.Clear();
+                    MenuCountReset();
                     ConsoleInput.Pause();
                     Console.Clear();
                     isOrder = false;
@@ -134,6 +137,14 @@ public class Kiosk
             isOrder = false;
             isShutDown = true;
             return;
+        }
+    }
+
+    public void MenuCountReset()
+    {
+        for (int i = 0; i < Menu.Length; i++)
+        {
+            Menu[i].CountReSet();
         }
     }
 
@@ -178,24 +189,44 @@ public class Kiosk
     }
 
     public void SelectMenuType(int orderM, List<Food> myMenu)
-    {
-        int orderN = 0;
+    {        
         switch (orderM)
         {
             case 1:
-                SelectMenuInfo(MenuType.메인);
-                
-                orderN = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 1, 4);
+                SelectMenuInfo(MenuType.메인);                
+                int orderNM = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 1, 4) - 1;                
+                Console.WriteLine("개수를 입력해주세요");
+
+                int orderCM = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);                
                 Console.Clear();
-                myMenu.Add(Menu[orderN]);                
+
+                Mains mains = (Mains)Menu[orderNM];
+                mains.Count = orderCM;
+                myMenu.Add(mains);
                 break;
+
             case 2:
                 SelectMenuInfo(MenuType.사이드);
+                int orderNS = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 5, 8);
+                Console.WriteLine("개수를 입력해주세요");
                 
-                orderN = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 5, 8);
+                int orderCS = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);                
                 Console.Clear();
-                myMenu.Add(Menu[orderN]);                
+
+                if (orderNS == 5 || orderNS == 6)
+                {
+                    Drink drink = (Drink)Menu[orderNS -1];
+                    drink.Count = orderCS;
+                    myMenu.Add(drink);                    
+                }
+                else 
+                {
+                    Side side = (Side)Menu[orderNS - 1];
+                    side.Count = orderCS;
+                    myMenu.Add(side);                    
+                }
                 break;
+
             default:
                 break;
         }
@@ -210,6 +241,13 @@ public abstract class Food
     public FoodType FType { get; protected set; }
     public int FPrice { get; protected set; }
 
+    private int count = 0;
+    public int Count
+    {
+        get { return count; }
+        set { count += value; }
+    }
+
     public Food(int fNum, string fName, FoodType fType, int fPrince)
     {
         FNum = fNum;
@@ -217,36 +255,27 @@ public abstract class Food
         FType = fType;
         FPrice = fPrince;
     }
-    public void PrintInfo()
+    public virtual void PrintInfo()
     {
         Console.WriteLine($"{FNum}. [{FType}] {FName} : {FPrice}원");
     }
-
-    public abstract void Calculate();
+    public void CountReSet()
+    {
+        count = 0;
+    }
+    public abstract int Calculate();
 }
 
-public class Rice : Food
+public class Mains : Food
 {
-    public Rice(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
+    public Mains(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
 
     }
 
-    public override void Calculate()
+    public override int Calculate()
     {
-        
-    }
-}
-
-public class Stew : Food
-{
-    public Stew(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
-    {
-
-    }
-    public override void Calculate()
-    {
-
+        return FPrice * Count;
     }
 }
 
@@ -256,9 +285,9 @@ public class Side : Food
     {
 
     }
-    public override void Calculate()
-    {
-
+    public override int Calculate()
+    {        
+        return FPrice * Count;
     }
 }
 
@@ -268,9 +297,25 @@ public class Drink : Food
     {
 
     }
-    public override void Calculate()
-    {
 
+    public override void PrintInfo()
+    {
+        Console.WriteLine($"{FNum}. [{FType}] {FName} : {FPrice}원 [\"3병 이상 구매시 10%할인\"]");
+    }
+    public override int Calculate()
+    {
+        if (Count > 0 && Count < 3)
+        {
+            return FPrice * Count;
+        }
+        else if (Count >= 3)
+        {
+            return (int)((FPrice * Count) - (0.1 * (FPrice * Count)));
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
 
