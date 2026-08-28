@@ -6,17 +6,17 @@ class Program
     const string FOOD_STORE_NAME = "던전 국밥";
     static void Main()
     {
-        Food[] memu = new Food[] 
+        Food[] menu = new Food[] 
         {             
             new Rice(1, "타우 머리 국밥", FoodType.국밥,9000),
             new Rice(2, "용 꼬리 국밥", FoodType.국밥,10000),
             new Stew(3, "얼큰 용암 슬라임 찌개", FoodType.찌개,7000),
-            new Stew(4, "복불복 미믹 찌개", FoodType.찌개,8000),
-            new Side(5, "다진 만드라고라",FoodType.추가, 300),
-            new Side(6, "하피 알",FoodType.추가, 500),            
-            new Drink(7, "탄산 슬라임", FoodType.음료, 1000),
-            new Drink(8, "세계수 이슬", FoodType.음료, 2000)
-        };
+            new Stew(4, "복불복 미믹 찌개", FoodType.찌개,8000),                      
+            new Drink(5, "탄산 슬라임", FoodType.음료, 1000),
+            new Drink(6, "세계수 이슬", FoodType.음료, 2000),
+            new Side(7, "다진 만드라고라",FoodType.추가, 300),
+            new Side(8, "하피 알",FoodType.추가, 500)
+        };                
 
         List<Food> myMenu = new List<Food>();
 
@@ -25,33 +25,22 @@ class Program
         Console.WriteLine("=====================");
         Console.WriteLine();
 
-        for (int i = 0; i < memu.Length; i++)
+        for (int i = 0; i < menu.Length; i++)
         {
-            memu[i].PrintInfo();
+            menu[i].PrintInfo();
         }        
 
         while (true)
         {
             Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");
             int order = ConsoleInput.ReadIntInRange("선택 번호 : ", 1, 4);
-            Order(order, myMenu);
+            Order(order, myMenu, menu);                     
 
-            if (order == 1)
-            {
-
-            }
-
-
-            Console.WriteLine("***메인 메뉴를 선택해주세요***");
-            Console.WriteLine("1. 국밥  2. 찌개");
-
-            Console.WriteLine("***사이드를 선택해주세요***");
-            Console.WriteLine("1. 추가  2. 음료");
         }
 
     }
 
-    public static void Order(int order, List<Food> myMenu)
+    public static void Order(int order, List<Food> myMenu, Food[] menu)
     {
         int totalM = 0;
         if(order == 1)
@@ -60,7 +49,7 @@ class Program
             Console.WriteLine("***메뉴 타입 선택해주세요***");
             Console.WriteLine("1. 메인  2. 사이드");
             int orderM = ConsoleInput.ReadIntInRange("메뉴 타입 : ",1, 2);
-            SelectMenuType(order, myMenu);
+            SelectMenuType(orderM, myMenu, menu);
         }
         else if(order == 2)
         {
@@ -82,17 +71,51 @@ class Program
         }
     }
 
-    public static void SelectMenuType(int mType, List<Food> myMenu)
+    public static void SelectMenuType(int orderM, List<Food> myMenu, Food[] menu)
     {
-        switch (mType)
+        switch (orderM)
         {
             case 1:
-                Console.WriteLine(FoodType.국밥);
-                Console.WriteLine(FoodType.찌개);
+                Console.WriteLine("***메인 메뉴를 선택해주세요***");
+                Console.WriteLine();
+                Console.WriteLine($"=== [{FoodType.국밥}] ===");
+                for(int i = 0; i< menu.Length;i++)
+                {
+                    if (menu[i].FType == FoodType.국밥)
+                    {
+                        menu[i].PrintInfo();
+                    }
+                }
+                Console.WriteLine($"=== [{FoodType.찌개}] ===");
+                for (int i = 0; i < menu.Length; i++)
+                {
+                    if (menu[i].FType == FoodType.찌개)
+                    {
+                        menu[i].PrintInfo();
+                    }
+                }
+                Console.WriteLine();
                 break;
             case 2:
-                Console.WriteLine(FoodType.추가);
-                Console.WriteLine(FoodType.음료);
+                Console.WriteLine("***사이드를 선택해주세요***");
+                Console.WriteLine();
+                Console.WriteLine($"=== [{FoodType.음료}] ===");
+                for (int i = 0; i < menu.Length; i++)
+                {
+                    if (menu[i].FType == FoodType.음료)
+                    {
+                        menu[i].PrintInfo();
+                    }
+                }
+                Console.WriteLine($"=== [{FoodType.추가}] ===");
+                for (int i = 0; i < menu.Length; i++)
+                {
+                    if (menu[i].FType == FoodType.추가)
+                    {
+                        menu[i].PrintInfo();
+                    }
+                }
+                Console.WriteLine();
                 break;
             default:
                 break;
@@ -119,7 +142,7 @@ public abstract class Food
 {
     protected int FNum;
     protected string FName;
-    protected FoodType FType;
+    public FoodType FType { get; protected set; }
     public int FPrice { get; protected set; }
 
     public Food(int fNum, string fName, FoodType fType, int fPrince)
