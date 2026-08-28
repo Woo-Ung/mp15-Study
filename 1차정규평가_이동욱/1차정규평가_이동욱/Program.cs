@@ -27,25 +27,68 @@ class Program
         for (int i = 0; i < memu.Length; i++)
         {
             memu[i].PrintInfo();
+        }        
+
+        while (true)
+        {
+            Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");
+            int order = ConsoleInput.ReadIntInRange("선택 번호 : ", 1, 4);
+            Order(order, myMenu);
+
+            if (order == 1)
+            {
+
+            }
+
+
+            Console.WriteLine("***메인 메뉴를 선택해주세요***");
+            Console.WriteLine("1. 국밥  2. 찌개");
+
+            Console.WriteLine("***사이드를 선택해주세요***");
+            Console.WriteLine("1. 추가  2. 음료");
         }
 
-        Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");
-
-        Console.WriteLine("***메뉴를 선택해주세요***");
-        Console.WriteLine("1. 메인  2. 사이드");
-
-
-
     }
-    public void SelectMenuType(MenuType mType)
+
+    public static void Order(int order, List<Food> myMenu)
+    {
+        int totalM = 0;
+        if(order == 1)
+        {
+            Console.Clear();
+            Console.WriteLine("***메뉴 타입 선택해주세요***");
+            Console.WriteLine("1. 메인  2. 사이드");
+            int orderM = ConsoleInput.ReadIntInRange("메뉴 타입 : "1, 2);
+        }
+        else if(order == 2)
+        {
+            myMenu.Clear();
+            return;
+        }
+        else if(order == 3)
+        {            
+            for(int i = 0; i < myMenu.Count; i++)
+            {
+                totalM += myMenu[i].FPrice;
+                Console.WriteLine($"총 결제 금액은 {totalM}입니다.");
+            }
+
+        }
+        else 
+        {
+            return;
+        }
+    }
+
+    public static void SelectMenuType(int mType)
     {
         switch (mType)
         {
-            case MenuType.메인:
+            case 1:
                 Console.WriteLine(FoodType.국밥);
                 Console.WriteLine(FoodType.찌개);
                 break;
-            case MenuType.사이드:
+            case 2:
                 Console.WriteLine(FoodType.추가);
                 Console.WriteLine(FoodType.음료);
                 break;
@@ -74,7 +117,7 @@ public abstract class Food
 {
     protected string FName;
     protected FoodType FType;
-    protected int FPrice;
+    public int FPrice { get; protected set; }
 
     public Food(string fName, FoodType fType, int fPrince)
     {
