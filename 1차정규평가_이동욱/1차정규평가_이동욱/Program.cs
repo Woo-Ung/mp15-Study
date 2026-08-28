@@ -5,9 +5,10 @@ using System.Xml.Linq;
 class Program
 {
     const string FOOD_STORE_NAME = "던전 국밥";
+    const int FOOD_COUNT = 8;
     static void Main()
     {
-        Food[] menu = new Food[] 
+        Food[] menu = new Food[FOOD_COUNT] 
         {             
             new Mains(1, "타우 머리 국밥", FoodType.식사,9000),
             new Mains(2, "용 꼬리 국밥", FoodType.식사,10000),
@@ -52,7 +53,7 @@ class Program
     }
 }
 
-// === Class ===
+// === Kiosk ===
 
 public class Kiosk
 {
@@ -136,6 +137,7 @@ public class Kiosk
                     isOrder = false;
                     return;
                 }
+
                 else
                 {
                     Console.WriteLine($"결제가 거부되었습니다. 금액이 {totalM - myMoney}부족합니다.");
@@ -192,6 +194,7 @@ public class Kiosk
                     Menu[i].PrintInfo();
                 }
             }
+            Console.WriteLine();
             Console.WriteLine($"=== [{FoodType.추가}] ===");
             for (int i = 0; i < Menu.Length; i++)
             {
@@ -258,7 +261,7 @@ public class Kiosk
         }
     }
 }
-
+// === Food class ===
 public abstract class Food
 {
     protected int FNum;
@@ -318,6 +321,7 @@ public class Side : Food
 
 public class Drink : Food
 {
+    const float DISCOUNT = 0.1f;
     public Drink(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
 
@@ -335,7 +339,7 @@ public class Drink : Food
         }
         else if (Count >= 3)
         {
-            return (int)((FPrice * Count) - (0.1 * (FPrice * Count)));
+            return (int)((FPrice * Count) - (DISCOUNT * (FPrice * Count)));
         }
         else
         {
