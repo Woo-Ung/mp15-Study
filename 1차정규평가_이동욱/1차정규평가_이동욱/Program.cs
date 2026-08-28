@@ -22,10 +22,11 @@ class Program
         
         List<Food> myMenu = new List<Food>();
 
-                
+        bool isShutDown = false;
 
-        while (true)
+        while (!isShutDown)
         {
+            bool isOrder = true;
             Console.WriteLine("=====================");
             Console.WriteLine($"===== {FOOD_STORE_NAME} =====");
             Console.WriteLine("=====================");
@@ -36,12 +37,14 @@ class Program
                 menu[i].PrintInfo();
             }
 
-            Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");
-            int order = ConsoleInput.ReadIntInRange("선택 번호 : ", 1, 4);
-            myKiosk.Order(order, myMenu);                 
-
+            while (isOrder)
+            {
+                Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");
+                int order = ConsoleInput.ReadIntInRange("선택 번호 : ", 1, 4);
+                myKiosk.Order(order, myMenu,ref isOrder, ref isShutDown);
+            }
         }
-
+        Console.WriteLine("===== 영업 종료 =====");
     }
 }
 
@@ -69,7 +72,7 @@ public class Kiosk
     }
     
     // 매서드
-    public void Order(int order, List<Food> myMenu)
+    public void Order(int order, List<Food> myMenu,ref bool isOrder, ref bool isShutDown)
     {
         int totalM = 0;
         if (order == 1)
@@ -78,8 +81,8 @@ public class Kiosk
             Console.WriteLine("***메뉴 타입 선택해주세요***");
             Console.WriteLine("1. 메인  2. 사이드");
             int orderM = ConsoleInput.ReadIntInRange("메뉴 타입 : ", 1, 2);
-            SelectMenuType(orderM, myMenu);
             Console.Clear();
+            SelectMenuType(orderM, myMenu);            
         }
         else if (order == 2)
         {
@@ -93,37 +96,49 @@ public class Kiosk
             {
                 totalM += myMenu[i].FPrice;
             }
-            Console.WriteLine($"총 결제 금액은 {totalM}입니다. 가지고 계신 금액을 입력해주세요.");
-            int myMoney = ConsoleInput.ReadIntInRange("내가 낼 금액 : ", 0, int.MaxValue);
-
-            if (myMoney >= totalM)
+            if(myMenu.Count == 0)
             {
-                Console.WriteLine($"결제되었습니다. 거스름돈 {myMoney - totalM}원");
-                TotalMoney = totalM;
-                TotalOrder = 1;
-                myMenu.Clear();
-                ConsoleInput.Pause();
-                Console.Clear();
-                return;
+                Console.WriteLine($"장바구니가 비어있습니다. 메뉴를 선택해주세요");
             }
             else
             {
-                Console.WriteLine($"결제가 거부되었습니다. 금액이 {totalM - myMoney}부족합니다.");
-                ConsoleInput.Pause();
-                Console.Clear();
-                return;
-            }         
+                Console.WriteLine($"총 결제 금액은 {totalM}입니다. 가지고 계신 금액을 입력해주세요.");
+                int myMoney = ConsoleInput.ReadIntInRange("내가 낼 금액 : ", 0, int.MaxValue);
+
+                if (myMoney >= totalM)
+                {
+                    Console.WriteLine($"결제되었습니다. 거스름돈 {myMoney - totalM}원");
+                    TotalMoney = totalM;
+                    TotalOrder = 1;
+                    myMenu.Clear();
+                    ConsoleInput.Pause();
+                    Console.Clear();
+                    isOrder = false;
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine($"결제가 거부되었습니다. 금액이 {totalM - myMoney}부족합니다.");
+                    ConsoleInput.Pause();
+                    Console.Clear();
+                    return;
+                }
+            }
         }
         else
         {
+            Console.Clear();
+            Console.WriteLine("===== 영업 결과 =====");
             Console.WriteLine($"총 주문 건수 : {TotalOrder}");
             Console.WriteLine($"총 매출액 : {TotalMoney}");
+            isOrder = false;
+            isShutDown = true;
             return;
         }
     }
 
     public void SelectMenuInfo(MenuType menuType)
-    {
+    {        
         Console.WriteLine($"***{menuType} 메뉴를 선택해주세요***");
         Console.WriteLine();
         if (menuType == MenuType.메인)
@@ -135,7 +150,9 @@ public class Kiosk
                 {
                     Menu[i].PrintInfo();
                 }
-            }            
+            }
+            Console.WriteLine();
+            Console.WriteLine($"***{FoodType.식사} 번호를 선택해주세요***");
         }
         else
         {
@@ -155,6 +172,8 @@ public class Kiosk
                     Menu[i].PrintInfo();
                 }
             }
+            Console.WriteLine();
+            Console.WriteLine($"***{MenuType.사이드} 번호를 선택해주세요***");
         }
     }
 
@@ -165,19 +184,17 @@ public class Kiosk
         {
             case 1:
                 SelectMenuInfo(MenuType.메인);
-                Console.WriteLine();
-                Console.WriteLine("***메뉴 번호를 선택해주세요***");
+                
                 orderN = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 1, 4);
-                myMenu.Add(Menu[orderN]);
                 Console.Clear();
+                myMenu.Add(Menu[orderN]);                
                 break;
             case 2:
                 SelectMenuInfo(MenuType.사이드);
-                Console.WriteLine();
-                Console.WriteLine("***사이드 번호를 선택해주세요***");
+                
                 orderN = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 5, 8);
-                myMenu.Add(Menu[orderN]);
                 Console.Clear();
+                myMenu.Add(Menu[orderN]);                
                 break;
             default:
                 break;
