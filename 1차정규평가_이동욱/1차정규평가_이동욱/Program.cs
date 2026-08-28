@@ -240,8 +240,7 @@ public class Kiosk
                     if (!myMenu.Contains(drink))
                     {
                         myMenu.Add(drink);
-                    }
-                    myMenu.Add(drink);                    
+                    }                                    
                 }
                 else 
                 {
@@ -250,8 +249,7 @@ public class Kiosk
                     if (!myMenu.Contains(side))
                     {
                         myMenu.Add(side);
-                    }
-                    myMenu.Add(side);                    
+                    }                                      
                 }
                 break;
 
