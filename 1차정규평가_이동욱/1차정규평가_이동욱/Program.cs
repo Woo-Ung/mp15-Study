@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 class Program
 {
     const string FOOD_STORE_NAME = "던전 국밥";
@@ -7,14 +8,14 @@ class Program
     {
         Food[] memu = new Food[] 
         {             
-            new Rice("타우 머리 국밥", FoodType.국밥,9000),
-            new Rice("용 꼬리 국밥", FoodType.국밥,10000),
-            new Stew("얼큰 용암 슬라임 찌개", FoodType.찌개,7000),
-            new Stew("복불복 미믹 찌개", FoodType.찌개,8000),
-            new Side("다진 만드라고라",FoodType.추가, 300),
-            new Side("하피 알",FoodType.추가, 500),            
-            new Drink("탄산 슬라임", FoodType.음료, 1000),
-            new Drink("세계수 이슬", FoodType.음료, 2000)
+            new Rice(1, "타우 머리 국밥", FoodType.국밥,9000),
+            new Rice(2, "용 꼬리 국밥", FoodType.국밥,10000),
+            new Stew(3, "얼큰 용암 슬라임 찌개", FoodType.찌개,7000),
+            new Stew(4, "복불복 미믹 찌개", FoodType.찌개,8000),
+            new Side(5, "다진 만드라고라",FoodType.추가, 300),
+            new Side(6, "하피 알",FoodType.추가, 500),            
+            new Drink(7, "탄산 슬라임", FoodType.음료, 1000),
+            new Drink(8, "세계수 이슬", FoodType.음료, 2000)
         };
 
         List<Food> myMenu = new List<Food>();
@@ -58,7 +59,8 @@ class Program
             Console.Clear();
             Console.WriteLine("***메뉴 타입 선택해주세요***");
             Console.WriteLine("1. 메인  2. 사이드");
-            int orderM = ConsoleInput.ReadIntInRange("메뉴 타입 : "1, 2);
+            int orderM = ConsoleInput.ReadIntInRange("메뉴 타입 : ",1, 2);
+            SelectMenuType(order, myMenu);
         }
         else if(order == 2)
         {
@@ -80,7 +82,7 @@ class Program
         }
     }
 
-    public static void SelectMenuType(int mType)
+    public static void SelectMenuType(int mType, List<Food> myMenu)
     {
         switch (mType)
         {
@@ -115,25 +117,27 @@ public enum FoodType
 
 public abstract class Food
 {
+    protected int FNum;
     protected string FName;
     protected FoodType FType;
     public int FPrice { get; protected set; }
 
-    public Food(string fName, FoodType fType, int fPrince)
+    public Food(int fNum, string fName, FoodType fType, int fPrince)
     {
+        FNum = fNum;
         FName = fName;
         FType = fType;
         FPrice = fPrince;
     }
     public void PrintInfo()
     {
-        Console.WriteLine($"[{FType}] {FName} : {FPrice}원");
+        Console.WriteLine($"{FNum}. [{FType}] {FName} : {FPrice}원");
     }
 }
 
 public class Rice : Food
 {
-    public Rice(string fName, FoodType fType, int fPrince) : base(fName, fType, fPrince)
+    public Rice(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
 
     }
@@ -141,7 +145,7 @@ public class Rice : Food
 
 public class Stew : Food
 {
-    public Stew(string fName, FoodType fType, int fPrince) : base(fName, fType, fPrince)
+    public Stew(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
 
     }
@@ -149,7 +153,7 @@ public class Stew : Food
 
 public class Side : Food
 {
-    public Side(string fName, FoodType fType, int fPrince) : base(fName, fType, fPrince)
+    public Side(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
 
     }
@@ -157,7 +161,7 @@ public class Side : Food
 
 public class Drink : Food
 {
-    public Drink(string fName, FoodType fType, int fPrince) : base(fName, fType, fPrince)
+    public Drink(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
 
     }
