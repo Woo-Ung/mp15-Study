@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 class Program
 {
@@ -124,19 +125,7 @@ class Program
 
 }
 
-public enum MenuType
-{
-    메인 = 1,
-    사이드
-}
-
-public enum FoodType
-{
-    국밥 = 1,
-    찌개,
-    추가,
-    음료
-}
+// === Class ===
 
 public abstract class Food
 {
@@ -156,6 +145,8 @@ public abstract class Food
     {
         Console.WriteLine($"{FNum}. [{FType}] {FName} : {FPrice}원");
     }
+
+    public abstract void Calculate();
 }
 
 public class Rice : Food
@@ -164,11 +155,20 @@ public class Rice : Food
     {
 
     }
+
+    public override void Calculate()
+    {
+        
+    }
 }
 
 public class Stew : Food
 {
     public Stew(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
+    {
+
+    }
+    public override void Calculate()
     {
 
     }
@@ -180,6 +180,10 @@ public class Side : Food
     {
 
     }
+    public override void Calculate()
+    {
+
+    }
 }
 
 public class Drink : Food
@@ -188,4 +192,23 @@ public class Drink : Food
     {
 
     }
+    public override void Calculate()
+    {
+
+    }
+}
+
+// === enum ===
+public enum MenuType
+{
+    메인 = 1,
+    사이드
+}
+
+public enum FoodType
+{
+    국밥 = 1,
+    찌개,
+    추가,
+    음료
 }
