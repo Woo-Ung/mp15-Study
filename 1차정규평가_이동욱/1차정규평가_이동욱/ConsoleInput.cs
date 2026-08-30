@@ -15,6 +15,10 @@ public class ConsoleInput
             string input = Console.ReadLine() + "";
             input = input.Trim();
 
+            Console.SetCursorPosition(0, 22);
+            Console.Write("                                                                ");
+            Console.SetCursorPosition(0, 22);
+
             if (input.Length == 0)
             {
                 Console.WriteLine($"  값을 입력해 주세요.");
