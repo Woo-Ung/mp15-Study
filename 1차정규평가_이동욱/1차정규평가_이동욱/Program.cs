@@ -194,7 +194,8 @@ public class Kiosk
                     isEmpty = true;
                     break;
                 }
-            }            
+            }
+            await Task.Delay(100);
         }
         return Num;
     }
@@ -203,16 +204,6 @@ public class Kiosk
         const int W_LINE = 26;
 
         int canCookNum = 0;
-
-        //for(int i = 0; i<isCanCookNum.Length; i++)
-        //{
-        //    if (isCanCookNum[i])
-        //    {
-        //        canCookNum = i;
-        //        isCanCookNum[i] = false;
-        //        break;
-        //    }
-        //}
 
         canCookNum = await canCooking();
 
