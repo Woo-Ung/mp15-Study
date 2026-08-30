@@ -73,6 +73,8 @@ public class Kiosk
         set { totalOrder += value; }
     }
 
+    public bool[] isCanCookNum = { true, true, true };
+
     public Food[] Menu;
 
     public Kiosk(Food[] menu)
@@ -177,22 +179,57 @@ public class Kiosk
         }
     }
 
+    public async Task<int> canCooking()
+    {
+        bool isEmpty = false;
+        int Num = 0;
+        while (!isEmpty)
+        {
+            for (int i = 0; i < isCanCookNum.Length; i++)
+            {
+                if (isCanCookNum[i])
+                {
+                    Num = i;
+                    isCanCookNum[i] = false;
+                    isEmpty = true;
+                    break;
+                }
+            }            
+        }
+        return Num;
+    }
     public async Task Cooking(int cookOrderNum, int totalCookCount)
     {
-        const int W_LINE = 25;
+        const int W_LINE = 26;
+
+        int canCookNum = 0;
+
+        //for(int i = 0; i<isCanCookNum.Length; i++)
+        //{
+        //    if (isCanCookNum[i])
+        //    {
+        //        canCookNum = i;
+        //        isCanCookNum[i] = false;
+        //        break;
+        //    }
+        //}
+
+        canCookNum = await canCooking();
+
         for (int i = 0; i < totalCookCount; i++)
         {
             await Task.Delay(1000);
-            Console.SetCursorPosition(0, W_LINE);
+            Console.SetCursorPosition(0, W_LINE - 1);
             Console.WriteLine("========================================================");
-            Console.SetCursorPosition(0, W_LINE + cookOrderNum);
+            Console.SetCursorPosition(0, W_LINE + canCookNum);
             Console.Write($"{cookOrderNum}번 주문 조리중 : {i} / {totalCookCount}");
             Console.SetCursorPosition(15, 21);
         }
-        Console.SetCursorPosition(0, W_LINE + cookOrderNum);
+        Console.SetCursorPosition(0, W_LINE + canCookNum);
         Console.Write("                                                                ");
-        Console.SetCursorPosition(0, W_LINE + cookOrderNum);
+        Console.SetCursorPosition(0, W_LINE + canCookNum);
         Console.WriteLine($"{cookOrderNum}번 주문 조리 완료 ");
+        isCanCookNum[canCookNum] = true;
         Console.SetCursorPosition(15, 21);
     }
 
