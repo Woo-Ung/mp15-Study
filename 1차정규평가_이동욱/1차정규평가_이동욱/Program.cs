@@ -2,9 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
-using System.Xml.Linq;
+using System.Net;
 
 class Program
 {
@@ -136,6 +134,8 @@ public class Kiosk
                     Console.WriteLine($"결제되었습니다. 거스름돈 {myMoney - totalM}원");
                     TotalMoney = totalM;
                     TotalOrder = 1;
+
+                    Cooking(TotalOrder);
                     myMenu.Clear();
                     MenuCountReset();
                     ConsoleInput.Pause();
@@ -166,6 +166,31 @@ public class Kiosk
             isShutDown = true;
             return;
         }
+    }
+
+    public async Task Cooking(int cookOrderNum)
+    {
+        Console.Write($"{cookOrderNum}번 주문 요리중 : ");
+
+        for (int i = 0; i < 10; i++)
+        {
+            await Task.Delay(1000);
+            Console.Write("ㅁ");            
+        }
+
+        await CookingCount(cookOrderNum);
+
+        
+
+        
+    }
+
+    public async Task CookingCount(int cookOrderNum)
+    {
+        await Task.Delay(10000);
+        Console.WriteLine();
+
+        Console.WriteLine($"{cookOrderNum}번 주문 완료 ");
     }
 
     public void MenuCountReset()
