@@ -71,6 +71,7 @@ public class Kiosk
         get { return totalOrder; }
         set { totalOrder += value; }
     }
+
     public Food[] Menu;
 
     public Kiosk(Food[] menu)
@@ -98,6 +99,7 @@ public class Kiosk
     public void Order(int order, List<Food> myMenu, ref bool isOrder, ref bool isShutDown)
     {
         int totalM = 0;
+        int totalCookCount = 0;
 
         if (order == 1)
         {
@@ -119,6 +121,7 @@ public class Kiosk
             for (int i = 0; i < myMenu.Count; i++)
             {
                 totalM += myMenu[i].Calculate();
+                totalCookCount += myMenu[i].CookTimeCalculate();
             }
             if (myMenu.Count == 0)
             {
@@ -135,7 +138,7 @@ public class Kiosk
                     TotalMoney = totalM;
                     TotalOrder = 1;
 
-                    Cooking(TotalOrder);
+                    Cooking(TotalOrder, totalCookCount);
                     myMenu.Clear();
                     MenuCountReset();
                     ConsoleInput.Pause();
@@ -168,24 +171,18 @@ public class Kiosk
         }
     }
 
-    public async Task Cooking(int cookOrderNum)
+    public async Task Cooking(int cookOrderNum, int totalCookCount)
     {  
-        for (int i = 0; i < 60; i++)
+        for (int i = 0; i < totalCookCount; i++)
         {
             await Task.Delay(1000);
             Console.SetCursorPosition(0, 24 + cookOrderNum);
-            Console.Write($"{cookOrderNum}번 주문 요리중 : {i} / 60");
+            Console.Write($"{cookOrderNum}번 주문 요리중 : {i} / {totalCookCount}");
         }
         Console.SetCursorPosition(0, 24 + cookOrderNum);
         Console.Write(new string(' ', Console.WindowWidth));
         Console.SetCursorPosition(0, 24 + cookOrderNum);
         Console.WriteLine($"{cookOrderNum}번 주문 완료 ");
-    }
-
-    public async Task CookingCount(int cookOrderNum)
-    {        
-        
-        
     }
 
     public void MenuCountReset()
@@ -226,7 +223,7 @@ public class Kiosk
                 }
             }
             Console.WriteLine();
-            Console.WriteLine($"***{MenuType.추가} 번호를 선택해주세요***");
+            Console.WriteLine($"***{MenuType.추가} 번호를 선택해주세요***");            
         }
 
         else
@@ -320,12 +317,14 @@ public abstract class Food
     public FoodType FType { get; protected set; }
     public int FPrice { get; protected set; }
 
+    public int CookCount { get; protected set; }
+
     private int count = 0;
     public int Count
     {
         get { return count; }
         set { count += value; }
-    }
+    }         
 
     public Food(int fNum, string fName, FoodType fType, int fPrince)
     {
@@ -343,19 +342,25 @@ public abstract class Food
         count = 0;
     }
     public abstract int Calculate();
+
+    public int CookTimeCalculate()
+    {
+        return CookCount * Count;
+    }
 }
 
 public class Mains : Food
 {
+    
     public Mains(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
-
+        CookCount = 30;
     }
 
     public override int Calculate()
     {
         return FPrice * Count;
-    }
+    }    
 }
 
 public class Side : Food
@@ -363,7 +368,7 @@ public class Side : Food
     const float DISCOUNT = 0.3f;
     public Side(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
-
+        CookCount = 1;
     }
 
     public override void PrintInfo()
@@ -393,7 +398,7 @@ public class Drink : Food
     const float DISCOUNT = 0.1f;
     public Drink(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
-
+        CookCount = 1;
     }
 
     public override void PrintInfo()
