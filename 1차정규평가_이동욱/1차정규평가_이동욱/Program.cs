@@ -170,27 +170,25 @@ public class Kiosk
 
     public async Task Cooking(int cookOrderNum)
     {
+        Console.SetCursorPosition(0, 20);        
         Console.Write($"{cookOrderNum}번 주문 요리중 : ");
 
         for (int i = 0; i < 10; i++)
         {
             await Task.Delay(1000);
-            Console.Write("ㅁ");            
-        }
-
-        await CookingCount(cookOrderNum);
-
-        
-
-        
+            Console.SetCursorPosition(i + 15, 20);
+            Console.Write("ㅁ");
+        }        
+        Console.SetCursorPosition(0, 20);
+        Console.Write(new string(' ', Console.WindowWidth));
+        Console.SetCursorPosition(0, 20);
+        Console.WriteLine($"{cookOrderNum}번 주문 완료 ");
     }
 
     public async Task CookingCount(int cookOrderNum)
-    {
-        await Task.Delay(10000);
-        Console.WriteLine();
-
-        Console.WriteLine($"{cookOrderNum}번 주문 완료 ");
+    {        
+        
+        
     }
 
     public void MenuCountReset()
