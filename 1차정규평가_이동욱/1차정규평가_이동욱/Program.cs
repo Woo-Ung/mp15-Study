@@ -12,20 +12,20 @@ class Program
     const int FOOD_COUNT = 8;
     static void Main()
     {
-        Food[] menu = new Food[FOOD_COUNT] 
-        {             
+        Food[] menu = new Food[FOOD_COUNT]
+        {
             new Mains(1, "타우 머리 국밥", FoodType.식사,9000),
             new Mains(2, "용 꼬리 국밥", FoodType.식사,10000),
             new Mains(3, "얼큰 용암 슬라임 찌개", FoodType.식사,7000),
-            new Mains(4, "복불복 미믹 찌개", FoodType.식사,8000),                      
+            new Mains(4, "복불복 미믹 찌개", FoodType.식사,8000),
             new Drink(5, "탄산 슬라임", FoodType.음료, 1000),
             new Drink(6, "세계수 이슬", FoodType.음료, 2000),
             new Side(7, "다진 만드라고라",FoodType.추가, 300),
-            new Side(8, "하피 알",FoodType.추가, 500)
+            new Side(8, "하피 알",FoodType.추가, 500)            
         };
 
         Kiosk myKiosk = new Kiosk(menu);
-        
+
         List<Food> myMenu = new List<Food>();
 
         bool isShutDown = false;
@@ -47,10 +47,10 @@ class Program
             {
                 Console.WriteLine();
                 myKiosk.PrintMyBag(myMenu);
-                Console.WriteLine();                
-                Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");                
+                Console.WriteLine();
+                Console.WriteLine("1. 주문  2. 전체 비우기  3. 결제  4.영업 종료");
                 int order = ConsoleInput.ReadIntInRange("선택 번호 : ", 1, 4);
-                myKiosk.Order(order, myMenu,ref isOrder, ref isShutDown);
+                myKiosk.Order(order, myMenu, ref isOrder, ref isShutDown);
             }
         }
         Console.WriteLine("===== 영업 종료 =====");
@@ -62,7 +62,7 @@ class Program
 public class Kiosk
 {
     private int totalMoney;
-    public int TotalMoney 
+    public int TotalMoney
     {
         get { return totalMoney; }
         set { totalMoney += value; }
@@ -79,7 +79,7 @@ public class Kiosk
     {
         Menu = menu;
     }
-    
+
     // 매서드
 
     public void PrintMyBag(List<Food> myMenu)
@@ -88,16 +88,16 @@ public class Kiosk
         Console.WriteLine("======== [장바구니] ========");
         Console.WriteLine();
         int totalM = 0;
-        for (int i = 0; i < myMenu.Count;i++)
+        for (int i = 0; i < myMenu.Count; i++)
         {
             Console.WriteLine($"{myMenu[i].FName} * {myMenu[i].Count}개 = {myMenu[i].Calculate()}원 ");
-            totalM += myMenu[i].Calculate();                                 
+            totalM += myMenu[i].Calculate();
         }
         Console.WriteLine();
         Console.WriteLine($"===== 합계 금액 : {totalM}원 =====");
     }
 
-    public void Order(int order, List<Food> myMenu,ref bool isOrder, ref bool isShutDown)
+    public void Order(int order, List<Food> myMenu, ref bool isOrder, ref bool isShutDown)
     {
         int totalM = 0;
 
@@ -108,7 +108,7 @@ public class Kiosk
             Console.WriteLine("1. 메인  2. 사이드");
             int orderM = ConsoleInput.ReadIntInRange("메뉴 타입 : ", 1, 2);
             Console.Clear();
-            SelectMenuType(orderM, myMenu);            
+            SelectMenuType(orderM, myMenu);
         }
         else if (order == 2)
         {
@@ -122,7 +122,7 @@ public class Kiosk
             {
                 totalM += myMenu[i].Calculate();
             }
-            if(myMenu.Count == 0)
+            if (myMenu.Count == 0)
             {
                 Console.WriteLine($"장바구니가 비어있습니다. 메뉴를 선택해주세요");
             }
@@ -177,7 +177,7 @@ public class Kiosk
     }
 
     public void SelectMenuInfo(MenuType menuType)
-    {        
+    {
         Console.WriteLine($"***{menuType} 메뉴를 선택해주세요***");
         Console.WriteLine();
         if (menuType == MenuType.메인)
@@ -192,7 +192,23 @@ public class Kiosk
             }
             Console.WriteLine();
             Console.WriteLine($"***{FoodType.식사} 번호를 선택해주세요***");
+
         }
+
+        else if (menuType == MenuType.추가)
+        {
+            Console.WriteLine($"=== [{FoodType.추가}] ===");
+            for (int i = 0; i < Menu.Length; i++)
+            {
+                if (Menu[i].FType == FoodType.추가)
+                {
+                    Menu[i].PrintInfo();
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine($"***{MenuType.추가} 번호를 선택해주세요***");
+        }
+
         else
         {
             Console.WriteLine($"=== [{FoodType.음료}] ===");
@@ -204,66 +220,72 @@ public class Kiosk
                 }
             }
             Console.WriteLine();
-            Console.WriteLine($"=== [{FoodType.추가}] ===");
-            for (int i = 0; i < Menu.Length; i++)
-            {
-                if (Menu[i].FType == FoodType.추가)
-                {
-                    Menu[i].PrintInfo();
-                }
-            }
-            Console.WriteLine();
             Console.WriteLine($"***{MenuType.사이드} 번호를 선택해주세요***");
         }
     }
 
     public void SelectMenuType(int orderM, List<Food> myMenu)
-    {        
+    {
         switch (orderM)
         {
             case 1:
-                SelectMenuInfo(MenuType.메인);                
-                int orderNM = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 1, 4) - 1;                
+                SelectMenuInfo(MenuType.메인);
+                int orderNM = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 1, 4);
                 Console.WriteLine("개수를 입력해주세요");
 
-                int orderCM = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);                
+                int orderCM = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);
                 Console.Clear();
 
-                Mains mains = (Mains)Menu[orderNM];
+                Mains mains = (Mains)Menu[orderNM - 1];
                 mains.Count = orderCM;
                 if (!myMenu.Contains(mains))
                 {
                     myMenu.Add(mains);
                 }
+                
+                SelectMenuInfo(MenuType.추가);
+                Console.WriteLine();
+                Console.WriteLine("*** 추가를 원하지 않을 시 9번을 눌러주세요 ***");
+                Console.WriteLine();
+
+                int orderNA = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 7, 9);
+
+                if (orderNA == 9)
+                {
+                    Console.Clear();
+                    break;
+                }
+
+                Console.WriteLine("개수를 입력해주세요");
+
+                int orderCA = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);
+                Console.Clear();
+
+                Side add = (Side)Menu[orderNA - 1];
+                add.Count = orderCA;
+                if (!myMenu.Contains(add))
+                {
+                    myMenu.Add(add);
+                }
+
                 break;
 
             case 2:
                 SelectMenuInfo(MenuType.사이드);
-                int orderNS = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 5, 8);
+                int orderNS = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 5, 6);
                 Console.WriteLine("개수를 입력해주세요");
-                
-                int orderCS = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);                
+
+                int orderCS = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);
                 Console.Clear();
 
-                if (orderNS == 5 || orderNS == 6)
+                Drink drink = (Drink)Menu[orderNS - 1];
+                drink.Count = orderCS;
+                if (!myMenu.Contains(drink))
                 {
-                    Drink drink = (Drink)Menu[orderNS -1];
-                    drink.Count = orderCS;
-                    if (!myMenu.Contains(drink))
-                    {
-                        myMenu.Add(drink);
-                    }                                    
+                    myMenu.Add(drink);
                 }
-                else 
-                {
-                    Side side = (Side)Menu[orderNS - 1];
-                    side.Count = orderCS;
-                    if (!myMenu.Contains(side))
-                    {
-                        myMenu.Add(side);
-                    }                                      
-                }
-                break;
+
+                break; 
 
             default:
                 break;
@@ -379,7 +401,8 @@ public class Drink : Food
 public enum MenuType
 {
     메인 = 1,
-    사이드
+    사이드,
+    추가
 }
 
 public enum FoodType
