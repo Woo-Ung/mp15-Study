@@ -126,7 +126,11 @@ public class Kiosk
             }
             if (myMenu.Count == 0)
             {
+                Console.Clear();
+                Console.SetCursorPosition(0, 20);
                 Console.WriteLine($"장바구니가 비어있습니다. 메뉴를 선택해주세요");
+                Console.SetCursorPosition(0, 0);
+
             }
             else
             {
@@ -182,13 +186,13 @@ public class Kiosk
             Console.SetCursorPosition(0, W_LINE);
             Console.WriteLine("========================================================");
             Console.SetCursorPosition(0, W_LINE + cookOrderNum);
-            Console.Write($"{cookOrderNum}번 주문 요리중 : {i} / {totalCookCount}");
+            Console.Write($"{cookOrderNum}번 주문 조리중 : {i} / {totalCookCount}");
             Console.SetCursorPosition(15, 21);
         }
         Console.SetCursorPosition(0, W_LINE + cookOrderNum);
         Console.Write("                                                                ");
         Console.SetCursorPosition(0, W_LINE + cookOrderNum);
-        Console.WriteLine($"{cookOrderNum}번 주문 완료 ");
+        Console.WriteLine($"{cookOrderNum}번 주문 조리 완료 ");
         Console.SetCursorPosition(15, 21);
     }
 
