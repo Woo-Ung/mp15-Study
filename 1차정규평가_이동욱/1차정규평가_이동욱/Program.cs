@@ -31,6 +31,7 @@ class Program
         while (!isShutDown)
         {
             bool isOrder = true;
+            Console.SetCursorPosition(0, 0);
             Console.WriteLine("=====================");
             Console.WriteLine($"===== {FOOD_STORE_NAME} =====");
             Console.WriteLine("=====================");
@@ -129,6 +130,7 @@ public class Kiosk
             }
             else
             {
+                Console.SetCursorPosition(0, 20);
                 Console.WriteLine($"총 결제 금액은 {totalM}입니다. 가지고 계신 금액을 입력해주세요.");
                 int myMoney = ConsoleInput.ReadIntInRange("내가 낼 금액 : ", 0, int.MaxValue);
 
@@ -176,13 +178,17 @@ public class Kiosk
         for (int i = 0; i < totalCookCount; i++)
         {
             await Task.Delay(1000);
+            Console.SetCursorPosition(0, 24);
+            Console.WriteLine("========================================================");
             Console.SetCursorPosition(0, 24 + cookOrderNum);
             Console.Write($"{cookOrderNum}번 주문 요리중 : {i} / {totalCookCount}");
+            Console.SetCursorPosition(15, 21);
         }
         Console.SetCursorPosition(0, 24 + cookOrderNum);
-        Console.Write(new string(' ', Console.WindowWidth));
+        Console.Write("                                                                ");
         Console.SetCursorPosition(0, 24 + cookOrderNum);
         Console.WriteLine($"{cookOrderNum}번 주문 완료 ");
+        Console.SetCursorPosition(15, 21);
     }
 
     public void MenuCountReset()
@@ -248,9 +254,10 @@ public class Kiosk
             case 1:
                 SelectMenuInfo(MenuType.메인);
                 int orderNM = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 1, 4);
+                Console.SetCursorPosition(0, 20);
                 Console.WriteLine("개수를 입력해주세요");
 
-                int orderCM = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);
+                int orderCM = ConsoleInput.ReadIntInRange("개수 : ", 1, 100);
                 Console.Clear();
 
                 Mains mains = (Mains)Menu[orderNM - 1];
@@ -272,10 +279,10 @@ public class Kiosk
                     Console.Clear();
                     break;
                 }
-
+                Console.SetCursorPosition(0, 20);
                 Console.WriteLine("개수를 입력해주세요");
 
-                int orderCA = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);
+                int orderCA = ConsoleInput.ReadIntInRange("개수 : ", 1, 100);
                 Console.Clear();
 
                 Side add = (Side)Menu[orderNA - 1];
@@ -290,9 +297,10 @@ public class Kiosk
             case 2:
                 SelectMenuInfo(MenuType.사이드);
                 int orderNS = ConsoleInput.ReadIntInRange("메뉴 번호 : ", 5, 6);
+                Console.SetCursorPosition(0, 20);
                 Console.WriteLine("개수를 입력해주세요");
 
-                int orderCS = ConsoleInput.ReadIntInRange("개수 : ", 0, 100);
+                int orderCS = ConsoleInput.ReadIntInRange("개수 : ", 1, 100);
                 Console.Clear();
 
                 Drink drink = (Drink)Menu[orderNS - 1];
@@ -316,7 +324,6 @@ public abstract class Food
     public string FName { get; protected set; }
     public FoodType FType { get; protected set; }
     public int FPrice { get; protected set; }
-
     public int CookCount { get; protected set; }
 
     private int count = 0;
@@ -354,7 +361,7 @@ public class Mains : Food
     
     public Mains(int fNum, string fName, FoodType fType, int fPrince) : base(fNum, fName, fType, fPrince)
     {
-        CookCount = 30;
+        CookCount = 20;
     }
 
     public override int Calculate()
