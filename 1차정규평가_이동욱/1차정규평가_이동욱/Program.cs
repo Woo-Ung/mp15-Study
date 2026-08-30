@@ -174,19 +174,20 @@ public class Kiosk
     }
 
     public async Task Cooking(int cookOrderNum, int totalCookCount)
-    {  
+    {
+        const int W_LINE = 25;
         for (int i = 0; i < totalCookCount; i++)
         {
             await Task.Delay(1000);
-            Console.SetCursorPosition(0, 24);
+            Console.SetCursorPosition(0, W_LINE);
             Console.WriteLine("========================================================");
-            Console.SetCursorPosition(0, 24 + cookOrderNum);
+            Console.SetCursorPosition(0, W_LINE + cookOrderNum);
             Console.Write($"{cookOrderNum}번 주문 요리중 : {i} / {totalCookCount}");
             Console.SetCursorPosition(15, 21);
         }
-        Console.SetCursorPosition(0, 24 + cookOrderNum);
+        Console.SetCursorPosition(0, W_LINE + cookOrderNum);
         Console.Write("                                                                ");
-        Console.SetCursorPosition(0, 24 + cookOrderNum);
+        Console.SetCursorPosition(0, W_LINE + cookOrderNum);
         Console.WriteLine($"{cookOrderNum}번 주문 완료 ");
         Console.SetCursorPosition(15, 21);
     }
