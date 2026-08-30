@@ -6,8 +6,12 @@ public class ConsoleInput
     {
         while (true)
         {
+            Console.SetCursorPosition(0, 21);            
+            Console.Write("                                                                ");
+            Console.SetCursorPosition(0, 21);
             Console.Write(prompt);
 
+            Console.SetCursorPosition(15, 21);
             string input = Console.ReadLine() + "";
             input = input.Trim();
 
